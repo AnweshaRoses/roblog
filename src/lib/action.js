@@ -1,6 +1,7 @@
 "use server"
 import { connectToDb } from "./utils";
 import { Post } from "./models";
+import { signIn, signOut } from "./auth";
 export const addPost=async(formData)=>{
 
     const { title, desc, slug, userId } = Object.fromEntries(formData);
@@ -37,3 +38,11 @@ export const deletePost = async (formData) => {
       return { error: "Something went wrong!" };
     }
   };
+  export const handleGithubLogin = async(e)=>{
+    "use server"
+    await signIn("github")
+  }
+  export const handleLogOut = async(e)=>{
+    "use server"
+    await signOut()
+  }
