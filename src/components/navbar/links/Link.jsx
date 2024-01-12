@@ -51,8 +51,10 @@ const Links = () => {
                     )
                 }
             </div>
-            
-           <button className={styles.menuButton} onClick={toggleIsLoading}>Menu</button>
+            <div suppressHydrationWarning>
+            <button className={styles.menuButton} onClick={() => setOpen((prev) => !prev)}>Menu</button>
+            </div>
+
       {open && (
         <div className={styles.mobileLinks}>
           {links.map((link) => (

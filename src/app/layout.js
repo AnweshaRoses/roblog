@@ -13,12 +13,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <body>
       <div className="container">
       <Navbar/>
-      {children}
+      <main className="h-fit">{children}</main>
       <Footer/>
       </div>
-
+      </body>
     </html>
   )
 }

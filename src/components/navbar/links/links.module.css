@@ -20,7 +20,7 @@
     }
     .menuButton{
         display: block;
-        cursor: pointer;
+        pointer-events: auto !important;
 
     }
     .mobileLinks{
