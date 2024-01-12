@@ -2,6 +2,7 @@
 import { connectToDb } from "./utils";
 import { Post, User } from "./models";
 import { signIn, signOut } from "./auth";
+import bcrypt from "bcryptjs"
 export const addPost=async(formData)=>{
 
     const { title, desc, slug, userId } = Object.fromEntries(formData);
@@ -46,25 +47,39 @@ export const deletePost = async (formData) => {
 
     await signOut()
   }
-  export const register = async(formData)=>{
+  export const register = async(previousState, formData)=>{
     const { username, email, password,img, passwordRepeat } = Object.fromEntries(formData);
     if(password!=passwordRepeat){
-      return "Passwords do not match!"
+      return {error:"Passwords do not match!"}
     }
     try{
       connectToDb()
       const user= await User.findOne({username})
       if(user){
-        return "User already exsists"
+        return {error:"User already exsists"}
       }
+      const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
       const newUser=new User({
         username,
         email,
-        password,
+        password:hashedPassword,
         img
     })
     await newUser.save();
     console.log("Saved to DB");
+    return {success:true}
+    }catch(err){
+      console.log(err);
+      return{error:"Something went wrong!"}
+    }
+  }
+
+  export const login = async(formData)=>{
+    const { username,  password } = Object.fromEntries(formData);
+
+    try{
+     await signIn("credentials",{username, password})
     }catch(err){
       console.log(err);
       return{error:"Something went wrong!"}
